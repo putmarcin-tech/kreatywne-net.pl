@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 60"><title>kabel — separator</title>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M10 34 C 120 44, 230 40, 280 30 C 320 20, 316 6, 300 12 C 284 18, 300 40, 340 38 C 420 34, 520 26, 584 26" stroke="#E4572E" stroke-width="4"></path>
+<circle cx="10" cy="34" r="6" fill="#E4572E" stroke="none"></circle>
+<circle cx="590" cy="26" r="5.5" stroke="#E4572E" stroke-width="3.5" fill="#F1F0EB"></circle></g></svg>
