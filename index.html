@@ -991,7 +991,7 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,()=>{const r=document.createRange();r.selectNodeContents(out);const s=getSelection();s.removeAllRanges();s.addRange(r);});}
 }));
 // Adres, pod który formularz wysyła zgłoszenie (np. Formspree, Resend, własne API). Pusty = wersja podglądowa.
-const W3F_KEY=''; // klucz dostępu Web3Forms
+const W3F_KEY='faf372af-0d3f-4b92-9562-1cad9d9d18e8'; // klucz dostępu Web3Forms
 const FORM_ENDPOINT=W3F_KEY?'https://api.web3forms.com/submit':'';
 const fields=[['f-name','e-name',v=>v.trim().length>1,'Wpisz imię i nazwisko.'],['f-mail','e-mail',v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()),'Wpisz poprawny adres e-mail, np. jan@firma.pl.'],['f-msg','e-msg',v=>v.trim().length>9,'Napisz kilka zdań o projekcie (min. 10 znaków).']];
 function check(id){const f=fields.find(x=>x[0]===id);const el=$(f[0]),okv=f[2](el.value);el.setAttribute('aria-invalid',String(!okv));$(f[1]).textContent=okv?'':f[3];return okv;}
