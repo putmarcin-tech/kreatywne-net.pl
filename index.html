@@ -243,6 +243,7 @@ p{margin:0}
 .reach div{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .reach div[hidden]{display:none}
 .reach output{font-size:20px;font-weight:600;user-select:all}
+.reach output a{text-decoration:underline;text-decoration-color:var(--c-obrys);text-underline-offset:4px}.reach output a:hover{text-decoration-color:var(--c-energia)}
 .copy{font-family:var(--tekst);font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:var(--c-atrament);border:1.5px solid var(--c-obrys);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
 form.card{background:rgba(38,36,31,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:14px;padding:clamp(22px,4vw,32px);display:flex;flex-direction:column;gap:16px}
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px}
@@ -521,14 +522,14 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
         <h2 class="display rv">Napisz, co chcesz zbudować.</h2>
         <p class="rv">Wystarczy kilka zdań: czym zajmuje się firma i co ma się zmienić. Odpowiadamy w ciągu 24 godzin.</p>
         <div class="reach rv">
-          <!-- E-mail do uzupełnienia po zakupie domeny: usuń atrybut hidden i wpisz adres -->
-          <div hidden><output id="mail"></output><button class="copy" type="button" data-copy="mail">Kopiuj</button></div>
+          <div><output id="mail"><a href="mailto:kontakt@kreatywne-net.pl">kontakt@kreatywne-net.pl</a></output><button class="copy" type="button" data-copy="mail">Kopiuj</button></div>
           <div><output id="tel">798 056 998</output><button class="copy" type="button" data-copy="tel">Kopiuj</button></div>
         </div>
         <img class="sep-c rv" src="img/brand/kabel-separator-pomaranczowy-ciemny.svg" alt="" width="600" height="60">
       </div>
       <form class="card rv" id="form" novalidate>
         <p class="req">Pola oznaczone * są wymagane.</p>
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="row">
           <label for="f-name">Imię i nazwisko *<input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name"><span class="err" id="e-name"></span></label>
           <label for="f-mail">E-mail *<input id="f-mail" name="email" type="email" autocomplete="email" required aria-describedby="e-mail"><span class="err" id="e-mail"></span></label>
@@ -557,7 +558,7 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
   <div class="wrap">
     <p class="big"><img src="img/brand/logo-ciemne-pomaranczowy-kabel.svg" alt="kreatywne-net" width="520" height="95"></p>
     <div class="cols">
-      <address>kreatywne-net to marka firmy Małgorzata Czura<br>ul. Bonarka 12/5, 30-415 Kraków<br>NIP 6793283584 · REGON 527006859<br>tel. 798 056 998</address>
+      <address>kreatywne-net to marka firmy Małgorzata Czura<br>ul. Bonarka 12/5, 30-415 Kraków<br>NIP 6793283584 · REGON 527006859<br>tel. 798 056 998 · <a href="mailto:kontakt@kreatywne-net.pl">kontakt@kreatywne-net.pl</a></address>
       <div style="display:flex;flex-direction:column;gap:4px"><a href="#top">Wróć na górę ↑</a><a href="polityka-prywatnosci.html">Polityka prywatności</a></div>
       <div style="display:flex;flex-direction:column;gap:10px"><p style="margin:0">© 2026 kreatywne-net</p><p class="foot-ai"><span class="ai-mini"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><mask id="aiKoMini"><rect width="100" height="100" fill="#fff"/><text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Space Grotesk, Arial, sans-serif" font-weight="700" font-size="44" fill="#000">AI</text></mask></defs><circle cx="50" cy="50" r="50" fill="#F1F0EB" mask="url(#aiKoMini)"/></svg></span><span>Grafiki i animacje na stronie zostały wykonane przy pomocy AI.</span></p></div>
     </div>
@@ -565,7 +566,7 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
 </footer>
 <div class="ai-badge" tabindex="0" role="note" aria-label="Grafiki i animacje na stronie zostały wykonane przy pomocy AI."><svg viewBox="0 0 100 100" aria-hidden="true"><defs><mask id="aiKo"><rect width="100" height="100" fill="#fff"/><text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Space Grotesk, Arial, sans-serif" font-weight="700" font-size="44" fill="#000">AI</text></mask></defs><circle cx="50" cy="50" r="50" fill="#F1F0EB" mask="url(#aiKo)"/></svg><span class="ai-tip" aria-hidden="true">Grafiki i animacje na stronie zostały wykonane przy pomocy AI.</span></div>
 
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "kreatywne-net", "legalName": "Małgorzata Czura", "description": "Projektowanie stron internetowych i wdrażanie agentów AI dla małych firm.", "taxID": "6793283584", "address": {"@type": "PostalAddress", "streetAddress": "ul. Bonarka 12/5", "postalCode": "30-415", "addressLocality": "Kraków", "addressCountry": "PL"}, "areaServed": {"@type": "Country", "name": "Polska"}, "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Usługi", "itemListElement": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Strony internetowe"}}, {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Agenci AI"}}]}, "telephone": "+48798056998"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "kreatywne-net", "legalName": "Małgorzata Czura", "description": "Projektowanie stron internetowych i wdrażanie agentów AI dla małych firm.", "taxID": "6793283584", "address": {"@type": "PostalAddress", "streetAddress": "ul. Bonarka 12/5", "postalCode": "30-415", "addressLocality": "Kraków", "addressCountry": "PL"}, "areaServed": {"@type": "Country", "name": "Polska"}, "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Usługi", "itemListElement": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Strony internetowe"}}, {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Agenci AI"}}]}, "telephone": "+48798056998", "email": "kontakt@kreatywne-net.pl"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Czym właściwie jest agent AI?", "acceptedAnswer": {"@type": "Answer", "text": "To program oparty na modelu językowym, który wykonuje konkretne zadanie: odpisuje na zapytania, ocenia leady i wpisuje je do CRM, przygotowuje szkic oferty albo odczytuje dane ze zdjęć i dokumentów. Działa na Twoich danych i według reguł, które razem ustalimy."}}, {"@type": "Question", "name": "Czy sam zmienię treści na stronie?", "acceptedAnswer": {"@type": "Answer", "text": "Tak. Dostajesz panel, w którym edytujesz teksty, zdjęcia, wpisy i podstrony bez dotykania kodu. Na koniec pokazujemy, jak z niego korzystać."}}, {"@type": "Question", "name": "Kto płaci za domenę i hosting?", "acceptedAnswer": {"@type": "Answer", "text": "Domena i hosting są zapisane na Ciebie, więc są Twoją własnością. Pomagamy je wybrać i wszystko konfigurujemy. Przy małych stronach hosting często mieści się w darmowym planie."}}, {"@type": "Question", "name": "Czy wystawiacie fakturę?", "acceptedAnswer": {"@type": "Answer", "text": "Tak, za każdą usługę wystawiamy fakturę na firmę Małgorzata Czura."}}]}</script>
 <script defer src="vendor/gsap.min.js"></script>
 <script defer src="vendor/ScrollTrigger.min.js"></script>
@@ -990,7 +991,8 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,()=>{const r=document.createRange();r.selectNodeContents(out);const s=getSelection();s.removeAllRanges();s.addRange(r);});}
 }));
 // Adres, pod który formularz wysyła zgłoszenie (np. Formspree, Resend, własne API). Pusty = wersja podglądowa.
-const FORM_ENDPOINT='';
+const W3F_KEY=''; // klucz dostępu Web3Forms
+const FORM_ENDPOINT=W3F_KEY?'https://api.web3forms.com/submit':'';
 const fields=[['f-name','e-name',v=>v.trim().length>1,'Wpisz imię i nazwisko.'],['f-mail','e-mail',v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()),'Wpisz poprawny adres e-mail, np. jan@firma.pl.'],['f-msg','e-msg',v=>v.trim().length>9,'Napisz kilka zdań o projekcie (min. 10 znaków).']];
 function check(id){const f=fields.find(x=>x[0]===id);const el=$(f[0]),okv=f[2](el.value);el.setAttribute('aria-invalid',String(!okv));$(f[1]).textContent=okv?'':f[3];return okv;}
 fields.forEach(f=>$(f[0]).addEventListener('blur',()=>{if($(f[0]).value)check(f[0]);}));
@@ -999,8 +1001,8 @@ $('form').addEventListener('submit',async e=>{e.preventDefault();const note=$('f
   if(bad.length){note.textContent='Popraw zaznaczone pola.';note.classList.add('blad');$(bad[0]).focus();return;}
   if(!FORM_ENDPOINT){note.textContent='To wersja podglądowa strony, więc wiadomość nie została wysłana. Po publikacji formularz trafi na skrzynkę firmy.';return;}
   const btn=e.target.querySelector('button[type=submit]');btn.disabled=true;note.textContent='Wysyłamy…';
-  try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});
-    if(!r.ok)throw new Error(r.status);e.target.reset();note.textContent='Dziękujemy! Wiadomość dotarła, odpiszemy w ciągu 24 godzin.';}
+  try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign(Object.fromEntries(new FormData(e.target)),{access_key:W3F_KEY,subject:'Nowe zapytanie ze strony kreatywne-net.pl',from_name:'Formularz kreatywne-net.pl'}))});
+    const j=await r.json().catch(()=>({}));if(!r.ok||j.success===false)throw new Error(r.status);e.target.reset();note.textContent='Dziękujemy! Wiadomość dotarła, odpiszemy w ciągu 24 godzin.';}
   catch(err){note.classList.add('blad');note.textContent='Nie udało się wysłać wiadomości. Spróbuj ponownie albo zadzwoń pod numer 798 056 998.';}
   finally{btn.disabled=false;}
 });
