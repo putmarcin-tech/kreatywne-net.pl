@@ -592,14 +592,19 @@ function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.i
 
 /* ================= ŚWIAT ================= */
 const WARM=['#FFC873','#FFD9A0','#FFB45E','#F9E2B8','#FFCF86'];
-function loadImg(src){const i=new Image();i.decoding='async';i.src=src;return i;}
+// Obraz uznajemy za gotowy dopiero po pełnym zdekodowaniu. Telefon potrafi oddać pusty obraz,
+// jeśli narysujemy go na canvasie za wcześnie, a my zapamiętujemy przygotowane plansze.
+function loadImg(src){const i=new Image();i._r=false;
+  const fin=()=>{if(i.naturalWidth>0&&!i._r){i._r=true;try{needDraw=true;nightDirty=true;}catch(e){}}};
+  i.addEventListener('load',()=>{(i.decode?i.decode():Promise.resolve()).then(fin,fin);});
+  i.src=src;return i;}
 const IMG={
   niebo:loadImg('img/niebo.webp'),wawel:loadImg('img/wawel.webp'),rynek:loadImg('img/rynek.webp'),
   grodzka:loadImg('img/grodzka.webp'),szpitalna:loadImg('img/szpitalna.webp'),kamienica:loadImg('img/kamienica.webp'),
   debniki:loadImg('img/debniki.webp')
 };
 const IMGS_READY=Promise.all(Object.values(IMG).map(i=>i.decode?i.decode().catch(()=>{}):new Promise(r=>{i.onload=i.onerror=r;})));
-const ok=i=>i.complete&&i.naturalWidth>0;
+const ok=i=>!!i&&i._r===true&&i.complete&&i.naturalWidth>0;
 
 /* Wypełnienie poza planszami: dalekie, przymglone kamienice */
 function makeRow(seed,x0,x1,o){
@@ -652,8 +657,9 @@ function hexA(h,a){const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16)+','+((
 function mk(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
 // Plansza z miękkimi bokami, dołem przechodzącym w podstawę i podstawą, która też wygasa (bez twardych prostokątów)
 function bake(p){
-  if(p.baked)return p.baked;if(!ok(p.img))return null;
+  if(p.baked){if(p.wingsFrom&&!p.baked.wing&&p.wingsFrom!==p&&ok(p.wingsFrom.img))addWing(p);return p.baked;}if(!ok(p.img))return null;
   const iw=p.iw,ih=p.ih,ext=Math.round(ih*1.6),H=ih+ext,c=mk(iw,H),g=c.getContext('2d');
+  if(!g)return null;
   g.imageSmoothingQuality='high';
   g.drawImage(p.img,0,0,iw,ih);
   g.fillStyle=p.bottom;g.fillRect(0,ih-1,iw,ext+1);
@@ -665,13 +671,15 @@ function bake(p){
   g.fillStyle=gr;g.fillRect(0,0,iw,H);
   gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#000');gr.addColorStop((ih+ext*.55)/H,'#000');gr.addColorStop(1,'rgba(0,0,0,0)');
   g.fillStyle=gr;g.fillRect(0,0,iw,H);
-  const soft=mk(iw,H),gs=soft.getContext('2d');gs.filter='blur('+(p.blur||1.8)+'px)';gs.drawImage(c,0,0);
+  let soft=mk(Math.ceil(iw/2),Math.ceil(H/2));const gs=soft.getContext('2d');if(!gs)soft=c;else gs.filter='blur('+((p.blur||1.8)/2)+'px)';if(gs)gs.drawImage(c,0,0,soft.width,soft.height);
   p.baked={c,soft,H};
-  if(p.wingsFrom){ // boki: dalsze, przymglone dachy, żeby panorama nie kończyła się nagle
-    const src=bake(p.wingsFrom);if(src){const wc=mk(iw,H),wg=wc.getContext('2d');wg.filter='brightness(.5) saturate(.55) blur(1.2px)';
-      wg.drawImage(src.c,0,0,src.c.width,src.c.height,0,H-src.c.height*(iw/src.c.width),iw,src.c.height*(iw/src.c.width));p.baked.wing=wc;}
-  }
+  if(p.wingsFrom)addWing(p);
   return p.baked;
+}
+function addWing(p){ // boki: dalsze, przymglone dachy, żeby panorama nie kończyła się nagle
+  const B=p.baked,src=p.wingsFrom===p?B:bake(p.wingsFrom);if(!B||!src)return;
+  const w2=Math.ceil(p.iw/2),h2=Math.ceil(B.H/2),wc=mk(w2,h2),wg=wc.getContext('2d');if(!wg)return;wg.filter='brightness(.5) saturate(.55) blur(.6px)';
+  wg.drawImage(src.c,0,0,src.c.width,src.c.height,0,h2-src.c.height*(w2/src.c.width),w2,src.c.height*(w2/src.c.width));B.wing=wc;
 }
 // Rysuje tylko widoczny fragment obrazu. Przy dużym zbliżeniu Safari na iPhonie potrafi pominąć
 // drawImage z gigantycznym prostokątem docelowym, więc przycinamy go do ekranu.
@@ -682,7 +690,10 @@ function dImg(ctx,img,dx,dy,dw,dh){
   const x0=Math.max(dx,-t.e/t.a-pad),x1=Math.min(dx+dw,(cw-t.e)/t.a+pad),y0=Math.max(dy,-t.f/t.d-pad),y1=Math.min(dy+dh,(ch-t.f)/t.d+pad);
   if(x1<=x0||y1<=y0)return;
   const iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height,fx=iw/dw,fy=ih/dh;
-  ctx.drawImage(img,(x0-dx)*fx,(y0-dy)*fy,(x1-x0)*fx,(y1-y0)*fy,x0,y0,x1-x0,y1-y0);
+  // Safari pomija całe drawImage, jeśli prostokąt źródłowy choć o ułamek piksela wychodzi poza obraz
+  let sx=Math.max(0,(x0-dx)*fx),sy=Math.max(0,(y0-dy)*fy),sw=Math.min((x1-x0)*fx,iw-sx),sh=Math.min((y1-y0)*fy,ih-sy);
+  if(sw<.01||sh<.01)return;
+  ctx.drawImage(img,sx,sy,sw,sh,dx+sx/fx,dy+sy/fy,sw/fx,sh/fy);
 }
 function drawPlate(ctx,p,k){
   const B=bake(p);if(!B)return;
