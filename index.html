@@ -43,7 +43,7 @@
 *{box-sizing:border-box}
 html{background:var(--krawedz,var(--c-tlo));transition:background-color .3s}
 html.noc{--krawedz:var(--noc)}
-body{background:var(--krawedz,var(--c-tlo));color:var(--c-atrament);font-family:var(--tekst);font-size:17px;line-height:26px;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{margin:0;background:var(--krawedz,var(--c-tlo));color:var(--c-atrament);font-family:var(--tekst);font-size:17px;line-height:26px;-webkit-font-smoothing:antialiased;overflow-x:clip}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--krawedz,var(--c-tlo))}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--c-blekit);outline-offset:2px;border-radius:4px}
@@ -673,6 +673,17 @@ function bake(p){
   }
   return p.baked;
 }
+// Rysuje tylko widoczny fragment obrazu. Przy dużym zbliżeniu Safari na iPhonie potrafi pominąć
+// drawImage z gigantycznym prostokątem docelowym, więc przycinamy go do ekranu.
+function dImg(ctx,img,dx,dy,dw,dh){
+  const t=ctx.getTransform?ctx.getTransform():null;
+  if(!t||t.b||t.c||t.a<=0||t.d<=0){ctx.drawImage(img,dx,dy,dw,dh);return;}
+  const cw=ctx.canvas.width,ch=ctx.canvas.height,pad=4/t.a;
+  const x0=Math.max(dx,-t.e/t.a-pad),x1=Math.min(dx+dw,(cw-t.e)/t.a+pad),y0=Math.max(dy,-t.f/t.d-pad),y1=Math.min(dy+dh,(ch-t.f)/t.d+pad);
+  if(x1<=x0||y1<=y0)return;
+  const iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height,fx=iw/dw,fy=ih/dh;
+  ctx.drawImage(img,(x0-dx)*fx,(y0-dy)*fy,(x1-x0)*fx,(y1-y0)*fy,x0,y0,x1-x0,y1-y0);
+}
 function drawPlate(ctx,p,k){
   const B=bake(p);if(!B)return;
   const s=p.w/p.iw,top=-p.ih*s+p.sink,hh=B.H*s;
@@ -681,8 +692,8 @@ function drawPlate(ctx,p,k){
     ctx.save();ctx.translate(p.x0+p.w-ww*.1+ww,0);ctx.scale(-1,1);ctx.drawImage(B.wing,0,top,ww,hh);ctx.restore();}
   // przy dużym zbliżeniu plansza przechodzi w lekko rozmytą wersję (zamiast widocznych pikseli)
   const ps=k*s*DPR, u=clamp((ps-1.25)/.8,0,1);
-  if(p.alwaysSoft||u>=1)ctx.drawImage(B.soft,p.x0,top,p.w,hh);
-  else{ctx.drawImage(B.c,p.x0,top,p.w,hh);if(u>0){const ga=ctx.globalAlpha;ctx.globalAlpha=ga*u;ctx.drawImage(B.soft,p.x0,top,p.w,hh);ctx.globalAlpha=ga;}}
+  if(p.alwaysSoft||u>=1)dImg(ctx,B.soft,p.x0,top,p.w,hh);
+  else{dImg(ctx,B.c,p.x0,top,p.w,hh);if(u>0){const ga=ctx.globalAlpha;ctx.globalAlpha=ga*u;dImg(ctx,B.soft,p.x0,top,p.w,hh);ctx.globalAlpha=ga;}}
 }
 // Odbicie Wawelu w Wiśle: odwrócona, rozmyta, przyciemniona plansza
 let REFL=null;
@@ -831,7 +842,7 @@ function render(ctx,W,H,cam,t,o){
       ctx.fillStyle=g;ctx.fillRect(cx-70,cy-70,140,140);
       // przy zbliżeniu podmieniamy fragment panoramy na szczegółową fasadę
       const ka=clamp((520-dz)/360,0,1);
-      const kf=kamFeather();if(ka>0&&kf){ctx.globalAlpha=a*ka;ctx.drawImage(kf,TARGET.x-KAM.wx*KAM.s,TARGET.y-KAM.wy*KAM.s,KAM.iw*KAM.s,KAM.ih*KAM.s);ctx.globalAlpha=a;}
+      const kf=kamFeather();if(ka>0&&kf){ctx.globalAlpha=a*ka;dImg(ctx,kf,TARGET.x-KAM.wx*KAM.s,TARGET.y-KAM.wy*KAM.s,KAM.iw*KAM.s,KAM.ih*KAM.s);ctx.globalAlpha=a;}
     }
     ctx.restore();
     if(L.mist>0){const gy=oy, hh=Math.max(140*k,40*sp);
