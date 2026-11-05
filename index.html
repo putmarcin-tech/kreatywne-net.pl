@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Strony internetowe i agenci AI w Krakowie | kreatywne-net</title>
+<meta name="theme-color" content="#0B0E22">
+<script>document.documentElement.classList.add('noc')</script>
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <meta name="description" content="Projektujemy strony internetowe i wdrażamy agentów AI dla małych firm. Pracownia kreatywne-net w Krakowie, projekty zdalnie w całej Polsce.">
 <link rel="canonical" href="https://kreatywne-net.pl/">
 <meta property="og:url" content="https://kreatywne-net.pl/">
@@ -35,9 +41,10 @@
   --gut-r:max(16px, env(safe-area-inset-right, 0px));
 }
 *{box-sizing:border-box}
-html{background:var(--c-tlo)}
-body{background:var(--c-tlo);color:var(--c-atrament);font-family:var(--tekst);font-size:17px;line-height:26px;-webkit-font-smoothing:antialiased;overflow-x:clip}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--c-tlo)}
+html{background:var(--krawedz,var(--c-tlo));transition:background-color .3s}
+html.noc{--krawedz:var(--noc)}
+body{background:var(--krawedz,var(--c-tlo));color:var(--c-atrament);font-family:var(--tekst);font-size:17px;line-height:26px;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--krawedz,var(--c-tlo))}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--c-blekit);outline-offset:2px;border-radius:4px}
 .jasne :focus-visible{outline-color:var(--blekit)}
@@ -1009,5 +1016,14 @@ $('form').addEventListener('submit',async e=>{e.preventDefault();const note=$('f
 });
 </script>
 
+<script>
+/* Kolor krawędzi ekranu (iOS Safari maluje pasek statusu i dolny pasek kolorem strony):
+   granat w czasie lotu nad Krakowem, ciemne tło dalej. */
+(function(){const r=document.documentElement,tc=document.querySelector('meta[name="theme-color"]');let on=null,q=false;
+function upd(){q=false;const w=document.getElementById('flight-wrap');if(!w)return;const n=w.getBoundingClientRect().bottom>innerHeight*.5;
+ if(n!==on){on=n;r.classList.toggle('noc',n);if(tc)tc.setAttribute('content',n?'#0B0E22':'#1B1A17');}}
+addEventListener('scroll',()=>{if(!q){q=true;requestAnimationFrame(upd);}},{passive:true});addEventListener('resize',upd);
+if(document.readyState!=='loading')upd();else document.addEventListener('DOMContentLoaded',upd);})();
+</script>
 </body>
 </html>
