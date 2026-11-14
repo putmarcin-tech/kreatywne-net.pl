@@ -292,6 +292,22 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
 #flight.rm #cap0{min-height:100svh}
 #flight.rm .cap:not(#cap0){padding-block:20px}
 #flight.rm .hud,#flight.rm #flash,#flight.rm .skip-lot{display:none}
+/* ==== Poprawka mobile: teksty lotu pod menu, CTA w górnym pasku ==== */
+@media (max-width:600px){
+  .cta-l{display:inline}
+  .cta-s{display:none}
+  .site-head .btn{padding:10px 14px;font-size:14px;white-space:nowrap}
+  .brand img{height:20px}
+  #flight:not(.rm) .cap{align-items:flex-start;padding-top:122px}
+  .cap .inner{gap:10px}
+  #cap0 .inner{gap:12px}
+  #cap0 h1{font-size:30px;line-height:1.08}
+  #cap0 .lede{font-size:15px;line-height:1.45}
+  .cap h2{font-size:28px}
+  .cap p{font-size:15px;line-height:1.45}
+  #cap0 .cta-row .btn{display:none}
+  #flight:not(.rm) .scrim{background:linear-gradient(180deg,rgba(12,14,30,.92) 0%,rgba(12,14,30,.75) 42%,rgba(12,14,30,0) 62%)}
+}
 </style>
 </head>
 <body>
