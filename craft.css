@@ -1,0 +1,26 @@
+/* ===== kreatywne-net: filcowe akcenty z kampanii  ===== */
+.felt{position:absolute;display:block;background:center/contain no-repeat;pointer-events:none}
+
+/* usługi: monitor i robot przy biurku na kartach */
+.svc{position:relative;overflow:visible!important}
+.services{margin-top:110px}
+.f-monitor{width:190px;aspect-ratio:713/682;top:-96px;right:-26px;transform:rotate(6deg);filter:drop-shadow(0 14px 14px rgba(0,0,0,.35))}
+.f-robot{width:200px;aspect-ratio:1023/1644;top:-150px;right:-30px;transform:rotate(-3deg);filter:drop-shadow(0 14px 14px rgba(0,0,0,.35))}
+@media(min-width:900px){#uslugi .sec-head > p{margin-right:210px}}
+@media(max-width:899px){.services{margin-top:80px}.f-monitor{width:120px;top:-70px;right:-8px}.f-robot{width:130px;top:-112px;right:-8px}}
+
+/* kontakt: oryginalne tło i kabel, tylko filcowy robot */
+#kontakt .lead{position:relative}
+.k-robot{width:110px;aspect-ratio:627/961;right:6%;bottom:-30px;transform:rotate(7deg);filter:drop-shadow(0 12px 12px rgba(0,0,0,.45))}
+@media(max-width:899px){.k-robot{width:76px;right:0;bottom:-16px}}
+
+/* wyróżnione pola: karty z gęstego, grafitowego filcu */
+.fact{background:#26241F url(img/craft/filc-karta-2.webp) 0 0/512px 512px!important}
+.svc,.step{background:#1B1A17 url(img/craft/filc-karta-1.webp) 0 0/512px 512px!important}
+.fact,.svc,.step{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),inset 0 -3px 8px rgba(0,0,0,.35),0 8px 20px rgba(0,0,0,.28)}
+
+/* formularz kontaktowy z filcu */
+form.card{background:#26241F url(img/craft/filc-karta-2.webp) 0 0/512px 512px;backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),inset 0 -3px 8px rgba(0,0,0,.35),0 14px 34px rgba(0,0,0,.45)}
+form.card input,form.card select,form.card textarea{background:rgba(17,16,14,.78);border-color:rgba(189,185,174,.38);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+form.card input:focus,form.card select:focus,form.card textarea:focus{border-color:var(--c-energia)}

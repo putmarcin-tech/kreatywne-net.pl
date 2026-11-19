@@ -147,7 +147,7 @@ p{margin:0}
 .studio{background:linear-gradient(180deg,#FBE3B0 0,#D9995A 10vh,#5A3B24 24vh,#2A221B 34vh,var(--tlo) 46vh);padding-block:30vh 0}
 .studio .hello{display:flex;flex-direction:column;gap:14px;padding-bottom:64px}
 .studio .hello .etykieta{color:var(--atrament-2)}
-.room{position:relative;margin:0;border-radius:14px;overflow:hidden;aspect-ratio:1376/768;max-width:100%}
+.room{position:relative;margin:0;border-radius:14px;overflow:hidden;aspect-ratio:16/9;max-width:100%}
 .room img{display:block;width:100%;height:100%;object-fit:cover;transform-origin:62% 45%;max-width:100%}
 .room-note{display:flex;align-items:flex-start;gap:8px;margin-top:10px;color:var(--atrament-2);font-size:14px}
 .about{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px 64px;padding-block:96px}
@@ -309,6 +309,7 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
   #flight:not(.rm) .scrim{background:linear-gradient(180deg,rgba(12,14,30,.92) 0%,rgba(12,14,30,.75) 42%,rgba(12,14,30,0) 62%)}
 }
 </style>
+<link rel="stylesheet" href="craft.css">
 </head>
 <body>
 
@@ -393,7 +394,7 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
     <div class="hello">
       <h2 class="display">Witaj w <span class="obw">pracowni.</span></h2>
     </div>
-    <figure class="room rv"><img src="img/pracownia.webp" srcset="img/pracownia-800.webp 800w, img/pracownia.webp 1376w" sizes="(max-width: 860px) 100vw, 1240px" loading="lazy" decoding="async" alt="Pracownia nocą: biurko z dwoma monitorami, mosiężna lampa i okno z widokiem na wieże Mariackiego" width="1376" height="768"></figure>
+    <figure class="room rv"><img src="img/pracownia.webp" srcset="img/pracownia-800.webp 800w, img/pracownia.webp 1920w" sizes="(max-width: 860px) 100vw, 1240px" loading="lazy" decoding="async" alt="Pracownia nocą: biurko z dwoma monitorami i mosiężną lampą, filcowy ludzik-kursor z lupą, telefon z filcu, kłębki włóczki i okno z widokiem na wieże Mariackiego" width="1920" height="1080"></figure>
     <div class="about">
       <div class="txt">
         <p class="etykieta rv">Kto za tym stoi</p>
@@ -591,6 +592,7 @@ footer a{color:var(--c-atrament);display:inline-block;padding-block:4px;min-heig
 
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "kreatywne-net", "legalName": "Małgorzata Czura", "description": "Projektowanie stron internetowych i wdrażanie agentów AI dla małych firm.", "taxID": "6793283584", "address": {"@type": "PostalAddress", "streetAddress": "ul. Bonarka 12/5", "postalCode": "30-415", "addressLocality": "Kraków", "addressCountry": "PL"}, "areaServed": {"@type": "Country", "name": "Polska"}, "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Usługi", "itemListElement": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Strony internetowe"}}, {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Agenci AI"}}]}, "telephone": "+48798056998", "email": "kontakt@kreatywne-net.pl"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Czym właściwie jest agent AI?", "acceptedAnswer": {"@type": "Answer", "text": "To program oparty na modelu językowym, który wykonuje konkretne zadanie: odpisuje na zapytania, ocenia leady i wpisuje je do CRM, przygotowuje szkic oferty albo odczytuje dane ze zdjęć i dokumentów. Działa na Twoich danych i według reguł, które razem ustalimy."}}, {"@type": "Question", "name": "Czy sam zmienię treści na stronie?", "acceptedAnswer": {"@type": "Answer", "text": "Tak. Dostajesz panel, w którym edytujesz teksty, zdjęcia, wpisy i podstrony bez dotykania kodu. Na koniec pokazujemy, jak z niego korzystać."}}, {"@type": "Question", "name": "Kto płaci za domenę i hosting?", "acceptedAnswer": {"@type": "Answer", "text": "Domena i hosting są zapisane na Ciebie, więc są Twoją własnością. Pomagamy je wybrać i wszystko konfigurujemy. Przy małych stronach hosting często mieści się w darmowym planie."}}, {"@type": "Question", "name": "Czy wystawiacie fakturę?", "acceptedAnswer": {"@type": "Answer", "text": "Tak, za każdą usługę wystawiamy fakturę na firmę Małgorzata Czura."}}]}</script>
+<script src="craft.js"></script>
 <script defer src="vendor/gsap.min.js"></script>
 <script defer src="vendor/ScrollTrigger.min.js"></script>
 <script defer src="vendor/lenis.min.js"></script>
@@ -774,47 +776,44 @@ function wingPath(ctx){
   ctx.beginPath();ctx.moveTo(10,0);ctx.bezierCurveTo(6,-34,-12,-70,-40,-94);
   ctx.quadraticCurveTo(-44,-70,-64,-72);ctx.quadraticCurveTo(-56,-52,-74,-42);ctx.quadraticCurveTo(-56,-28,-62,-12);ctx.quadraticCurveTo(-40,-10,-22,4);ctx.closePath();
 }
+/* Filcowy smok: ciało z planszy, falujące paskami, skrzydła machają wokół barku */
+const SMOK={body:loadImg('img/smok.webp'),open:loadImg('img/smok-ogien.webp'),
+  up:loadImg('img/smok-skrzydlo.webp'),up2:loadImg('img/smok-skrzydlo-dalsze.webp'),
+  dn:loadImg('img/smok-skrzydlo-dol.webp'),dn2:loadImg('img/smok-skrzydlo-dol-dalsze.webp')};
+// wymiary w jednostkach sceny (ciało 250 jedn. długości); punkty z plansz: pysk (1660,210), bark (1120,190) na 1738x602
+const SB={w:250,h:250*602/1738}, SBx0=-125, SBy0=-SB.h/2-5;
+const MOUTH={x:SBx0+1640/1738*SB.w,y:SBy0+238/602*SB.h};
+const SHOULDER={x:SBx0+1120/1738*SB.w,y:SBy0+196/602*SB.h};
+// klatki skrzydła w tej samej skali: jednostki na piksel planszy źródłowej, nasada skrzydła w pikselach planszy
+const WU=104/1023, WF={up:{w:1060,h:1023,rx:1018,ry:1012},dn:{w:1034,h:739,rx:986,ry:730}};
+function bodyWave(u,t){return Math.sin(u*6.2-t*2.6)*6*Math.pow(1-u,1.3);}
+function drawWing(ctx,img,f,ax,ay,sy,rot,alpha){
+  if(!ok(img)||alpha<=0.01)return;
+  ctx.save();ctx.globalAlpha*=alpha;ctx.translate(ax,ay);ctx.rotate(rot);ctx.scale(1,sy);
+  ctx.drawImage(img,-f.rx*WU,-f.ry*WU,f.w*WU,f.h*WU);ctx.restore();
+}
+// jedno uderzenie: ph=1 skrzydło w górze, ph=0 w dole; klatki przełączają się w środku ruchu
+function wings(ctx,far,ax,ay,ph){
+  const k=smooth(clamp((ph-.38)/.24,0,1)), rot=(1-ph)*.22-.04, sy=.86+.14*ph;
+  drawWing(ctx,far?SMOK.dn2:SMOK.dn,WF.dn,ax,ay,sy,rot*.6,1-k);
+  drawWing(ctx,far?SMOK.up2:SMOK.up,WF.up,ax,ay,sy,rot,k);
+}
 function drawDragon(ctx,x,y,s,t,fire){
   ctx.save();ctx.translate(x,y);ctx.scale(s,s);
-  const flap=Math.sin(t*4.6),fy=flap>0?flap:flap*.65;
-  const N=30,top=[],bot=[];let px=0,py=0,ang=0;
-  for(let i=0;i<=N;i++){
-    const u=i/N,xx=-130+u*190;
-    const yy=Math.sin(u*6.2-t*2.6)*7*Math.pow(1-u,1.2)-(u>.74?Math.pow(u-.74,2)*190:0)+Math.sin(t*4.6+1.2)*2;
-    const w=u<.6?.8+8.6*Math.pow(u/.6,1.3):(u<.86?9.4-(u-.6)/.26*5.2:4.2+(u-.86)/.14*1.4);
-    if(i>0){ang=Math.atan2(yy-py,xx-px);}
-    const nx=-Math.sin(ang),ny=Math.cos(ang);
-    top.push([xx+nx*w,yy+ny*w]);bot.push([xx-nx*w,yy-ny*w]);
-    if(i===Math.round(N*.6)){var sx=xx,sy=yy;}
-    px=xx;py=yy;
-  }
-  ctx.fillStyle='#0D0E24';
-  ctx.save();ctx.translate(sx+4,sy-4);ctx.scale(.86,fy*.9);wingPath(ctx);ctx.fill();ctx.restore();
-  ctx.fillStyle='#05060F';
-  ctx.beginPath();ctx.moveTo(top[0][0],top[0][1]);for(const p of top)ctx.lineTo(p[0],p[1]);for(let i=bot.length-1;i>=0;i--)ctx.lineTo(bot[i][0],bot[i][1]);ctx.closePath();ctx.fill();
-  // ogon
-  const t0=[(top[0][0]+bot[0][0])/2,(top[0][1]+bot[0][1])/2];
-  ctx.beginPath();ctx.moveTo(t0[0]+2,t0[1]);ctx.lineTo(t0[0]-10,t0[1]-7);ctx.lineTo(t0[0]-20,t0[1]);ctx.lineTo(t0[0]-10,t0[1]+7);ctx.closePath();ctx.fill();
-  // grzebień
-  for(let i=8;i<22;i+=2){const p=top[i];ctx.beginPath();ctx.moveTo(p[0]-3,p[1]);ctx.lineTo(p[0],p[1]-5);ctx.lineTo(p[0]+3,p[1]);ctx.fill();}
-  // łapy
-  const lp=bot[Math.round(N*.48)],fp=bot[Math.round(N*.7)];
-  ctx.beginPath();poly(ctx,[[lp[0]-3,lp[1]-2],[lp[0]-9,lp[1]+12],[lp[0]-2,lp[1]+13],[lp[0]+4,lp[1]-1]]);ctx.fill();
-  ctx.beginPath();poly(ctx,[[fp[0]-2,fp[1]-2],[fp[0]+2,fp[1]+10],[fp[0]+8,fp[1]+9],[fp[0]+4,fp[1]-1]]);ctx.fill();
-  // głowa
-  const E=[px,py];ctx.save();ctx.translate(E[0],E[1]);ctx.rotate(ang*.5);
-  ctx.beginPath();poly(ctx,[[-4,-6],[10,-6],[24,-2],[27,1],[14,3],[24,6],[12,8],[-4,6]]);ctx.fill();
-  ctx.beginPath();poly(ctx,[[-2,-5],[-14,-15],[4,-7]]);ctx.fill();
-  ctx.beginPath();poly(ctx,[[2,-6],[-6,-17],[8,-7]]);ctx.fill();
-  ctx.fillStyle='#FFB14A';ctx.beginPath();ctx.arc(9,-2,1.4,0,6.283);ctx.fill();
-  if(fire>0){
-    for(let i=0;i<16;i++){const u=i/15,fx=26+u*70*fire,fyy=3+Math.sin(t*20+i)*4*u;const r=(3+u*11)*fire;
-      const g=ctx.createRadialGradient(fx,fyy,0,fx,fyy,r);g.addColorStop(0,'rgba(255,240,200,'+(.9*(1-u))+')');g.addColorStop(.5,'rgba(255,150,50,'+(.7*(1-u))+')');g.addColorStop(1,'rgba(255,80,20,0)');
-      ctx.fillStyle=g;ctx.beginPath();ctx.arc(fx,fyy,r,0,6.283);ctx.fill();}
-  }
-  ctx.restore();
-  // bliższe skrzydło
-  ctx.fillStyle='#05060F';ctx.save();ctx.translate(sx,sy);ctx.scale(1,fy);wingPath(ctx);ctx.fill();ctx.restore();
+  const ph=(Math.sin(t*4.6)+1)/2, ph2=(Math.sin(t*4.6-.35)+1)/2;
+  const su=(SHOULDER.x-SBx0)/SB.w, sy=bodyWave(su,t)-(ph-.5)*2.4; // ciało lekko unosi się przy uderzeniu
+  wings(ctx,true,SHOULDER.x+10,SHOULDER.y+sy-4,ph2);
+  // ciało: przy zionięciu płynnie podmieniamy na planszę z otwartym pyskiem
+  const lift=-(ph-.5)*2.4, k=ok(SMOK.open)?smooth(clamp(fire*2.2,0,1)):0;
+  function body(B,al){if(!ok(B)||al<=.01)return;const N=36,iw=B.naturalWidth,ih=B.naturalHeight;ctx.save();ctx.globalAlpha*=al;
+    for(let i=0;i<N;i++){const u0=i/N,u1=(i+1)/N,dy=bodyWave((u0+u1)/2,t)+lift;
+      ctx.drawImage(B,u0*iw,0,(u1-u0)*iw+1,ih,SBx0+u0*SB.w,SBy0+dy,(u1-u0)*SB.w+.6,SB.h);}ctx.restore();}
+  body(SMOK.body,1);body(SMOK.open,k); // otwarty pysk nakładamy na zamknięty, żeby nic nie prześwitywało
+  if(fire>0){const mx=MOUTH.x+2,my=MOUTH.y+bodyWave(.97,t)-(ph-.5)*2.4;
+    for(let i=0;i<22;i++){const u=i/21,fx=mx+u*130*fire,fyy=my+u*16+Math.sin(t*20+i)*5*u;const r=(4+u*20)*fire;
+      const g=ctx.createRadialGradient(fx,fyy,0,fx,fyy,r);g.addColorStop(0,'rgba(255,245,215,'+(.95*(1-u*.8))+')');g.addColorStop(.45,'rgba(255,160,60,'+(.8*(1-u*.7))+')');g.addColorStop(1,'rgba(255,80,20,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(fx,fyy,r,0,6.283);ctx.fill();}}
+  wings(ctx,false,SHOULDER.x,SHOULDER.y+sy,ph);
   ctx.restore();
 }
 
