@@ -787,22 +787,22 @@ const SHOULDER={x:SBx0+1120/1738*SB.w,y:SBy0+196/602*SB.h};
 // klatki skrzydła w tej samej skali: jednostki na piksel planszy źródłowej, nasada skrzydła w pikselach planszy
 const WU=104/1023, WF={up:{w:1060,h:1023,rx:1018,ry:1012},dn:{w:1034,h:739,rx:986,ry:730}};
 function bodyWave(u,t){return Math.sin(u*6.2-t*2.6)*6*Math.pow(1-u,1.3);}
-function drawWing(ctx,img,f,ax,ay,sy,rot,alpha){
-  if(!ok(img)||alpha<=0.01)return;
-  ctx.save();ctx.globalAlpha*=alpha;ctx.translate(ax,ay);ctx.rotate(rot);ctx.scale(1,sy);
+function drawWing(ctx,img,f,ax,ay,sy,rot,alpha,sc){
+  if(!ok(img)||alpha<=0.01)return;sc=sc||1;
+  ctx.save();ctx.globalAlpha*=alpha;ctx.translate(ax,ay);ctx.rotate(rot);ctx.scale(sc,sy*sc);
   ctx.drawImage(img,-f.rx*WU,-f.ry*WU,f.w*WU,f.h*WU);ctx.restore();
 }
 // jedno uderzenie: ph=1 skrzydło w górze, ph=0 w dole; klatki przełączają się w środku ruchu
 function wings(ctx,far,ax,ay,ph){
-  const k=smooth(clamp((ph-.38)/.24,0,1)), rot=(1-ph)*.22-.04, sy=.86+.14*ph;
-  drawWing(ctx,far?SMOK.dn2:SMOK.dn,WF.dn,ax,ay,sy,rot*.6,1-k);
-  drawWing(ctx,far?SMOK.up2:SMOK.up,WF.up,ax,ay,sy,rot,k);
+  const k=smooth(clamp((ph-.38)/.24,0,1)), rot=(1-ph)*.22-.04+(far?-.06:0), sy=.86+.14*ph, sc=far?.9:1;
+  drawWing(ctx,far?SMOK.dn2:SMOK.dn,WF.dn,ax,ay,sy,rot*.6,1-k,sc);
+  drawWing(ctx,far?SMOK.up2:SMOK.up,WF.up,ax,ay,sy,rot,k,sc);
 }
 function drawDragon(ctx,x,y,s,t,fire){
   ctx.save();ctx.translate(x,y);ctx.scale(s,s);
   const ph=(Math.sin(t*4.6)+1)/2, ph2=(Math.sin(t*4.6-.35)+1)/2;
   const su=(SHOULDER.x-SBx0)/SB.w, sy=bodyWave(su,t)-(ph-.5)*2.4; // ciało lekko unosi się przy uderzeniu
-  wings(ctx,true,SHOULDER.x+10,SHOULDER.y+sy-4,ph2);
+  wings(ctx,true,SHOULDER.x-4,SHOULDER.y+sy+9,ph2); // dalsze: nasada schowana za grzbietem
   // ciało: przy zionięciu płynnie podmieniamy na planszę z otwartym pyskiem
   const lift=-(ph-.5)*2.4, k=ok(SMOK.open)?smooth(clamp(fire*2.2,0,1)):0;
   function body(B,al){if(!ok(B)||al<=.01)return;const N=36,iw=B.naturalWidth,ih=B.naturalHeight;ctx.save();ctx.globalAlpha*=al;
@@ -813,7 +813,7 @@ function drawDragon(ctx,x,y,s,t,fire){
     for(let i=0;i<22;i++){const u=i/21,fx=mx+u*130*fire,fyy=my+u*16+Math.sin(t*20+i)*5*u;const r=(4+u*20)*fire;
       const g=ctx.createRadialGradient(fx,fyy,0,fx,fyy,r);g.addColorStop(0,'rgba(255,245,215,'+(.95*(1-u*.8))+')');g.addColorStop(.45,'rgba(255,160,60,'+(.8*(1-u*.7))+')');g.addColorStop(1,'rgba(255,80,20,0)');
       ctx.fillStyle=g;ctx.beginPath();ctx.arc(fx,fyy,r,0,6.283);ctx.fill();}}
-  wings(ctx,false,SHOULDER.x,SHOULDER.y+sy,ph);
+  wings(ctx,false,SHOULDER.x+2,SHOULDER.y+sy+8,ph); // bliższe: nasada wchodzi w grzbiet
   ctx.restore();
 }
 
@@ -844,7 +844,7 @@ function render(ctx,W,H,cam,t,o){
       const x=lerp(-.12*W,1.12*W,d);
       const y=my+(x-mx)*-.16+Math.sin(d*9)*8*sp;
       const near=1-Math.min(1,Math.abs(x-mx)/(W*.18));
-      drawDragon(ctx,x,y,1.25*sp*Math.max(.7,m),t,near>.35?smooth(clamp((near-.35)/.4,0,1)):0);
+      drawDragon(ctx,x,y,1.0*sp*Math.max(.7,m),t,near>.35?smooth(clamp((near-.35)/.4,0,1)):0);
     }
   }
   for(const L of LAYERS){
